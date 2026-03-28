@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react"
 import type { User, ApiResponse } from "shared"
 
@@ -16,16 +17,21 @@ export default function App() {
   const [users, setUsers] = useState<User[]>([])
 
   const loadUsers = async () => {
-    const res = await fetch("http://localhost:3000/users")
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users`)
     const data: ApiResponse<User[]> = await res.json()
 
     setUsers(data.data)
   }
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+  const fetchUsers = async () => {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users?key=learn`)
+    const data = await res.json()
+    setUsers(data.data)
+  }
 
+  fetchUsers()
+}, [])
   return (
     <div className="flex justify-center p-10">
 
